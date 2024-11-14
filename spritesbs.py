@@ -89,13 +89,15 @@ class Block(Sprite):
         self.rect.y = y 
     
     def collide_with_stuff(self, group, kill):
-            hits = pg.sprite.spritecollide(self, group, kill)
-            if hits:
-                if str(hits[0].__class__.__name__) == "Projectie":
-                    a = "I hit a Block..."
-                    print(a))
-                    #question about how to delete blocks
-                    del a
+        hits = pg.sprite.spritecollide(self, group, kill)
+    
+        if str(hits[0].__class__.__name__) == "Powerup":
+                print("I hit a powerup")
+                self.speed += 5
+        if hits:
+            if str(hits[0].__class__.__name__) == "Powerup":
+                print("I hit a powerup")
+                self.speed += 2
 
 class Wall(Sprite):
     def __init__(self, game, x, y):

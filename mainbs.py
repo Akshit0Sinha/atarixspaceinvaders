@@ -6,13 +6,6 @@ from random import randint
 from tilemapbs import *
 '''
 
-GOALS: destroy all blocks
-RULES: don't let the ball fall down into the abyss
-FEEDBACK: ball bouncing off block in __ direction
-FREEDOM: moving the base below to track the ball
-#git test
-
-What sentence does your game make?
     
 When player collides with enemy, bounces off
 '''
@@ -41,6 +34,7 @@ class Game:
         self.all_blocks = pg.sprite.Group()
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
+        self.player = paddle(self, 1, 1)
 
 
         for row, tiles in enumerate(self.map.data):
@@ -66,6 +60,7 @@ class Game:
             self.update()
             self.draw()
 
+    
         
         #create ball, physics for ball bounce of paddle
 
