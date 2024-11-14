@@ -74,8 +74,31 @@ class Projectile(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x 
         self.rect.y = y 
+        projectile_radius = 20
+        projectile_x = WIDTH // 2
+        projectile_y = HEIGHT // 2
+        projectile_dx = 5  
+        projectile_dy = 5  
+        if projectile_x - projectile_radius <= 0 or projectile_x + projectile_radius >= WIDTH:
+             projectile_dx = -projectile_dx
+        if projectile_y - projectile_radius <= 0 or projectile_y + projectile_radius >= HEIGHT:
+             projectile_dy = -projectile_dy
+
+    def collide_with_stuff(self, group, kill):
         
-    
+        hits = pg.sprite.spritecollide(self, group, kill)
+        projectile_radius = 20
+        projectile_x = WIDTH // 2
+        projectile_y = HEIGHT // 2
+        projectile_dx = 5  
+        projectile_dy = 5
+        if hits:
+            if str(hits[0].__class__.__name__) == "Block":
+                print("I hit a block")
+                hits = pg.sprite.spritecollide(self,self.game.all_projectiles, False)
+                projectile_dx = -projectile_dx
+                projectile_dy = -projectile_dy
+        
 
 class Block(Sprite):
     def __init__(self, game, x, y):
@@ -87,18 +110,6 @@ class Block(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x 
         self.rect.y = y 
-    
-    def collide_with_stuff(self, group, kill):
-        hits = pg.sprite.spritecollide(self, group, kill)
-    
-        if str(hits[0].__class__.__name__) == "Powerup":
-                print("I hit a powerup")
-                self.speed += 5
-        if hits:
-            if str(hits[0].__class__.__name__) == "Powerup":
-                print("I hit a powerup")
-                self.speed += 2
-
 class Wall(Sprite):
     def __init__(self, game, x, y):
         self.game = game

@@ -34,7 +34,7 @@ class Game:
         self.all_blocks = pg.sprite.Group()
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
-        self.player = paddle(self, 1, 1)
+        self.player = paddle (self, 1, 1)
 
 
         for row, tiles in enumerate(self.map.data):
