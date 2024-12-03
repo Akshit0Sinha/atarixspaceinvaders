@@ -24,7 +24,11 @@ class Game:
         self.running = True
     def load_data(self):
         self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, 'images')
+        self.snd_folder = path.join(self.game_folder, 'sounds')
         self.map = Map(path.join(self.game_folder, 'level1.txt'))
+        self.shoot_snd = pg.mixer.Sound(path.join)
+
     def new(self):
         self.load_data()
         print(self.map.data)
@@ -34,7 +38,7 @@ class Game:
         self.all_blocks = pg.sprite.Group()
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
-        self.player = paddle (self, 1, 1)
+        self.player = paddle(self, 1, 1)
 
 
         for row, tiles in enumerate(self.map.data):
@@ -86,14 +90,38 @@ class Game:
         self.draw_text(self.screen, "Powerups Collected: " + str(self.player.powerups), 24, BLACK, WIDTH/2, HEIGHT/24)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
+    def show_go_screen(self):
+        # game over/continue
+        if not self.running:
+            return
+        self.screen.fill(BLACK)
+        self.draw_text(self.screen, "Restart", 48, BLACK, WIDTH / 2, HEIGHT / 4)
+        if self.score > self.highscore:
+            self.highscore = self.score
+            self.draw_text(self.screen, "NEW HIGH SCORE!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+        else:
+            self.draw_text(self.screen, "High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+        pg.display.flip()
+        self.wait_for_key()
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.running = False
+                if event.type == pg.KEYUP:
+                    waiting = False
     
 if __name__ == "__mainbs__":
     print("main is running")
     g = Game()
     #creates all game elements with new method (not function)
-    g.new()
-    # run tha game
-    g.run()
+    g.show_go_screen()
+    while g.playing:
+        g.new()
+        g.run()
     print("main is running")
     
     
