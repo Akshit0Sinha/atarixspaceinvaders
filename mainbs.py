@@ -95,6 +95,7 @@ class Game:
         if not self.running:
             return
         self.screen.fill(BLACK)
+        #end screen
         self.draw_text(self.screen, "Restart", 48, BLACK, WIDTH / 2, HEIGHT / 4)
         if self.score > self.highscore:
             self.highscore = self.score
@@ -103,6 +104,7 @@ class Game:
             self.draw_text(self.screen, "High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
         pg.display.flip()
         self.wait_for_key()
+    
     def wait_for_key(self):
         waiting = True
         while waiting:
@@ -114,7 +116,7 @@ class Game:
                 if event.type == pg.KEYUP:
                     waiting = False
     
-if __name__ == "__mainbs__":
+if __name__ == "__main__":
     print("main is running")
     g = Game()
     #creates all game elements with new method (not function)

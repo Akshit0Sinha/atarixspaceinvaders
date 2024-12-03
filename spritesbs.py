@@ -6,7 +6,7 @@ from mainbs import *
 
 vec = pg.math.Vector2
 
-
+#paddle code
 class paddle(Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -19,7 +19,7 @@ class paddle(Sprite):
         self.y = y * TILESIZE
         self.speed = 10
         self.vx, self.vy = 0, 0
-
+# code to move paddle
     def get_keys(self):
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT]:
@@ -31,7 +31,7 @@ class paddle(Sprite):
             Projectile(self.game, WIDTH/2, HEIGHT/2)
             print(p.rect.x)
             
-
+# paddle colliding with ball
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
@@ -43,7 +43,7 @@ class paddle(Sprite):
                     self.x = hits[0].rect.right
                 self.vx = 0
                 self.rect.x = self.x
-        
+        #y dir for collision of wall w paddle
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
             if hits:
@@ -55,7 +55,7 @@ class paddle(Sprite):
                 self.vy = 0
                 self.rect.y = self.y
         
-        
+        #collide with paddle and powerup
         def collide_with_stuff(self, group, kill):
             hits = pg.sprite.spritecollide(self, group, kill)
             if hits:
@@ -63,7 +63,7 @@ class paddle(Sprite):
                     print("i hit a powerup...")
                     self.speed =+ 5
 
-
+#projectile is ball, so initializing ball
 class Projectile(Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -74,6 +74,7 @@ class Projectile(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x 
         self.rect.y = y 
+        #physics on ball with colliding, movement, etc
         projectile_radius = 20
         projectile_x = WIDTH // 2
         projectile_y = HEIGHT // 2
@@ -84,8 +85,8 @@ class Projectile(Sprite):
         if projectile_y - projectile_radius <= 0 or projectile_y + projectile_radius >= HEIGHT:
              projectile_dy = -projectile_dy
 
+# collide ball with blocks
     def collide_with_stuff(self, group, kill):
-        
         hits = pg.sprite.spritecollide(self, group, kill)
         projectile_radius = 20
         projectile_x = WIDTH // 2
@@ -99,7 +100,7 @@ class Projectile(Sprite):
                 projectile_dx = -projectile_dx
                 projectile_dy = -projectile_dy
         
-
+#blocks on screen
 class Block(Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -110,6 +111,7 @@ class Block(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x 
         self.rect.y = y 
+#wall on three sides 
 class Wall(Sprite):
     def __init__(self, game, x, y):
         self.game = game
@@ -120,7 +122,7 @@ class Wall(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-        
+#powerups class, still need to add  poweup release from collision of ball with block
 class Powerup(Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.all_powerups
