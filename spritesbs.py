@@ -56,12 +56,12 @@ class paddle(Sprite):
                 self.rect.y = self.y
         
         #collide with paddle and powerup
-        def collide_with_stuff(self, group, kill):
-            hits = pg.sprite.spritecollide(self, group, kill)
-            if hits:
-                if str(hits[0].__class__.__name__) == "Powerup":
-                    print("i hit a powerup...")
-                    self.speed =+ 5
+    def collide_with_stuff(self, group, kill):
+        hits = pg.sprite.spritecollide(self, group, kill)
+        if hits:
+            if str(hits[0].__class__.__name__) == "Powerup":
+                print("i hit a powerup...")
+                self.speed =+ 5
 
 #projectile is ball, so initializing ball
 class Projectile(Sprite):

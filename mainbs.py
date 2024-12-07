@@ -24,6 +24,17 @@ class Game:
         self.running = True
     def load_data(self):
         self.game_folder = path.dirname(__file__)
+        # load high score file
+        # from chagpt - prompt: with open create file in python
+        with open(path.join(self.game_folder, HS_FILE), 'w') as file:
+            file.write("High Score File!")
+        print("file created and written successfully.")
+        
+        with open(path.join(self.game_folder, HS_FILE), 'r') as f:
+             try:
+                self.highscore = int(f.read())
+             except:
+                self.highscore = 0
         self.img_folder = path.join(self.game_folder, 'images')
         self.snd_folder = path.join(self.game_folder, 'sounds')
         self.map = Map(path.join(self.game_folder, 'level1.txt'))
@@ -72,7 +83,14 @@ class Game:
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                self.running = False
+                if self.score > self.highscore:
+                    self.highscore = self.score
+                    with open(path.join(self.game_folder, HS_FILE), 'w') as f:
+                        f.write(str(self.score))
+            if self.playing:
+                self.playing = False
+            self.running = False
+            
 #base code for creating base screen 
     def update(self):
         self.all_sprites.update()
@@ -91,17 +109,21 @@ class Game:
         self.all_sprites.draw(self.screen)
         pg.display.flip()
     def show_go_screen(self):
+        self.game_folder = path.dirname(__file__)
         # game over/continue
         if not self.running:
             return
+        if path.exists(HS_FILE):
+          print("this exists...")
+          with open(path.join(self.game_folder, HS_FILE), 'r') as f:
+                self.highscore = int(f.read())
+        else:
+          with open(path.join(self.game_folder, HS_FILE), 'w') as f:
+                  f.write(str(0))
+        print("File created and written successfully.")
         self.screen.fill(BLACK)
         #end screen
         self.draw_text(self.screen, "Restart", 48, BLACK, WIDTH / 2, HEIGHT / 4)
-        if self.score > self.highscore:
-            self.highscore = self.score
-            self.draw_text(self.screen, "NEW HIGH SCORE!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
-        else:
-            self.draw_text(self.screen, "High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
         pg.display.flip()
         self.wait_for_key()
     
