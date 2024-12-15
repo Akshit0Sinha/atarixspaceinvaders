@@ -22,6 +22,7 @@ class Game:
         pg.display.set_caption("Breakout x Space Invaders")
         self.clock = pg.time.Clock()
         self.running = True
+        self.playing = True
     def load_data(self):
         self.game_folder = path.dirname(__file__)
         # load high score file
@@ -38,7 +39,7 @@ class Game:
         self.img_folder = path.join(self.game_folder, 'images')
         self.snd_folder = path.join(self.game_folder, 'sounds')
         self.map = Map(path.join(self.game_folder, 'level1.txt'))
-        self.shoot_snd = pg.mixer.Sound(path.join)
+       #self.shoot_snd = pg.mixer.Sound(path.join)
 
     def new(self):
         self.load_data()
@@ -70,6 +71,7 @@ class Game:
     def run(self):
         while self.running:
             #update evertyhing in sprite with four event definitions to define sprite
+            
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
             self.update()
@@ -89,7 +91,11 @@ class Game:
                         f.write(str(self.score))
             if self.playing:
                 self.playing = False
-            self.running = False
+            self.running = True
+            if event.type == pg.K_r:
+                if event.key == pg.K_ESCAPE:  # Example: press Escape to quit
+                    self.running = False
+
             
 #base code for creating base screen 
     def update(self):
@@ -101,31 +107,31 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x,y)
         surface.blit(text_surface, text_rect)
-
+    
     def draw(self):
         self.screen.fill(WHITE)
         self.draw_text(self.screen, str(self.dt*1000), 24, BLACK, WIDTH/2, HEIGHT/2)
-        self.draw_text(self.screen, "Powerups Collected: " + str(self.player.powerups), 24, BLACK, WIDTH/2, HEIGHT/24)
+        #self.draw_text(self.screen, "Powerups Collected: " + str(self.player.powerups), 24, BLACK, WIDTH/2, HEIGHT/24)
         self.all_sprites.draw(self.screen)
         pg.display.flip()
     def show_go_screen(self):
         self.game_folder = path.dirname(__file__)
         # game over/continue
-        if not self.running:
-            return
-        if path.exists(HS_FILE):
-          print("this exists...")
-          with open(path.join(self.game_folder, HS_FILE), 'r') as f:
-                self.highscore = int(f.read())
-        else:
-          with open(path.join(self.game_folder, HS_FILE), 'w') as f:
-                  f.write(str(0))
+        
+        #if path.exists(HS_FILE):
+         # print("this exists...")
+          #with open(path.join(self.game_folder, HS_FILE), 'r') as f:
+           #     self.highscore = int(f.read())
+        #else:
+         # with open(path.join(self.game_folder, HS_FILE), 'w') as f:
+          #        f.write(str(0))
         print("File created and written successfully.")
-        self.screen.fill(BLACK)
+        self.screen.fill(WHITE)
         #end screen
-        self.draw_text(self.screen, "Restart", 48, BLACK, WIDTH / 2, HEIGHT / 4)
-        pg.display.flip()
-        self.wait_for_key()
+        if not self.running:
+            self.draw_text(self.screen, "Restart", 48, BLACK, WIDTH / 2, HEIGHT / 4)
+            pg.display.flip()
+            self.wait_for_key()
     
     def wait_for_key(self):
         waiting = True
@@ -147,5 +153,3 @@ if __name__ == "__main__":
         g.new()
         g.run()
     print("main is running")
-    
-    

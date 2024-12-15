@@ -29,7 +29,7 @@ class paddle(Sprite):
         if pg.mouse.get_pressed()[0]:
             print(pg.mouse.get_pos())
             Projectile(self.game, WIDTH/2, HEIGHT/2)
-            print(p.rect.x)
+            print(pg.rect.x)
             
 # paddle colliding with ball
     def collide_with_walls(self, dir):
@@ -62,6 +62,7 @@ class paddle(Sprite):
             if str(hits[0].__class__.__name__) == "Powerup":
                 print("i hit a powerup...")
                 self.speed =+ 5
+        
 
 #projectile is ball, so initializing ball
 class Projectile(Sprite):
@@ -75,6 +76,7 @@ class Projectile(Sprite):
         self.rect.x = x 
         self.rect.y = y 
         #physics on ball with colliding, movement, etc
+    def update(self):
         projectile_radius = 20
         projectile_x = WIDTH // 2
         projectile_y = HEIGHT // 2
@@ -93,12 +95,14 @@ class Projectile(Sprite):
         projectile_y = HEIGHT // 2
         projectile_dx = 5  
         projectile_dy = 5
+    def update(self):
         if hits:
             if str(hits[0].__class__.__name__) == "Block":
                 print("I hit a block")
                 hits = pg.sprite.spritecollide(self,self.game.all_projectiles, False)
                 projectile_dx = -projectile_dx
                 projectile_dy = -projectile_dy
+    
         
 #blocks on screen
 class Block(Sprite):
@@ -111,6 +115,61 @@ class Block(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x 
         self.rect.y = y 
+        self.x = x
+        self.y = y
+        self.visible = True  # To track if the block is still active
+    def update(self):
+        if hits:
+            if str(hits[0].__class__.__name__) == "Block":
+                print("I hit a block")
+       
+
+    def collide(self, ball):
+        """Check if the block collides with the ball."""
+        # Check for collision using AABB (Axis-Aligned Bounding Box) method
+        if (self.x < ball.x + ball.radius and
+            self.x + self.width > ball.x - ball.radius and
+            self.y < ball.y + ball.radius and
+            self.y + self.height > ball.y - ball.radius):
+            return True
+        return False
+
+    def remove(self):
+        """Mark the block as invisible (removed)."""
+        self.visible = False
+
+
+class Ball:
+    def __init__(self, x, y, radius, dx, dy):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.dx = dx  # Ball movement in x direction
+        self.dy = dy  # Ball movement in y direction
+
+    def update(self):
+        """Update the ball's position based on its velocity."""
+        self.x += self.dx
+        self.y += self.dy
+
+#modified from chat gpt - create a codebase for blocks to be removed once collided with ball
+class Update:
+    def __init__(self, blocks, ball):
+        self.blocks = blocks  # List of blocks in the game
+        self.ball = ball      # The ball object
+
+    def check_collisions(self):
+        """Check for collisions between the ball and the blocks."""
+        for block in self.blocks:
+            if block.visible and block.collide(self.ball):
+                block.remove()  # Remove the block on collision
+            
+
+    def update(self):
+        """Update game state: move the ball and check for collisions."""
+        self.ball.update()  # Move the ball
+        self.check_collisions()  # Check for collisions with blocks
+        
 #wall on three sides 
 class Wall(Sprite):
     def __init__(self, game, x, y):
@@ -122,6 +181,8 @@ class Wall(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+    
+        
 #powerups class, still need to add  poweup release from collision of ball with block
 class Powerup(Sprite):
     def __init__(self, game, x, y):
@@ -133,6 +194,7 @@ class Powerup(Sprite):
         self.image.fill(GREEN)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+        self.update()
 
     def update(self):
         pass
