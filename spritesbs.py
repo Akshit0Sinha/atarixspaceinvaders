@@ -7,7 +7,7 @@ from mainbs import *
 vec = pg.math.Vector2
 
 #paddle code
-class paddle(Sprite):
+class Paddle(Sprite):
     def __init__(self, game, x, y):
         self.game = game
         self.groups = game.all_sprites, game.all_paddles
@@ -122,14 +122,9 @@ class Block(Sprite):
         self.y = y
         self.visible = True  # To track if the block is still active
     
-
-
-#modified from chat gpt - create a codebase for blocks to be removed once collided with ball
-
-
     def update(self):
         """Update game state: move the ball and check for collisions."""
-        self.ball.update()  # Move the ball
+        game.projectile_update()  # Move the ball
         self.check_collisions()  # Check for collisions with blocks
         
 #wall on three sides 

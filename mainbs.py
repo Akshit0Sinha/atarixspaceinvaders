@@ -51,7 +51,7 @@ class Game:
         self.all_blocks = pg.sprite.Group()
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
-        self.player = paddle(self, 101, 101)
+        self.player = Paddle(self, 101, 101)
         #self.check_highscore()
 
 
@@ -62,7 +62,7 @@ class Game:
                 if tile == '1':
                     Wall(self, col, row)
                 if tile == 'P':
-                    paddle(self, col, row)
+                    Paddle(self, col, row)
                 if tile == 'B':
                     Block(self, col, row)
                 if tile == 'U':
