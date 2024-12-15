@@ -122,10 +122,10 @@ class Block(Sprite):
         self.y = y
         self.visible = True  # To track if the block is still active
     
-    def update(self):
-        """Update game state: move the ball and check for collisions."""
-        game.projectile_update()  # Move the ball
-        self.check_collisions()  # Check for collisions with blocks
+    # def update(self):
+    #     """Update game state: move the ball and check for collisions."""
+    #     game.projectile_update()  # Move the ball
+    #     self.check_collisions()  # Check for collisions with blocks
         
 #wall on three sides 
 class Wall(Sprite):
