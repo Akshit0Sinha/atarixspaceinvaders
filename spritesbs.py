@@ -66,7 +66,7 @@ class paddle(Sprite):
 
 #projectile is ball, so initializing ball
 class Projectile(Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y,):
         self.game = game
         self.groups = game.all_sprites, game.all_projectiles
         Sprite.__init__(self, self.groups)
@@ -82,6 +82,8 @@ class Projectile(Sprite):
         projectile_y = HEIGHT // 2
         projectile_dx = 5  
         projectile_dy = 5  
+        self.x += self.dx
+        self.y += self.dy
         if projectile_x - projectile_radius <= 0 or projectile_x + projectile_radius >= WIDTH:
              projectile_dx = -projectile_dx
         if projectile_y - projectile_radius <= 0 or projectile_y + projectile_radius >= HEIGHT:
@@ -96,6 +98,7 @@ class Projectile(Sprite):
         projectile_dx = 5  
         projectile_dy = 5
     def update(self):
+        hits = pg.sprite.spritecollide(self, self.game.all_projectiles, False)
         if hits:
             if str(hits[0].__class__.__name__) == "Block":
                 print("I hit a block")
@@ -118,39 +121,8 @@ class Block(Sprite):
         self.x = x
         self.y = y
         self.visible = True  # To track if the block is still active
-    def update(self):
-        if hits:
-            if str(hits[0].__class__.__name__) == "Block":
-                print("I hit a block")
-       
+    
 
-    def collide(self, ball):
-        """Check if the block collides with the ball."""
-        # Check for collision using AABB (Axis-Aligned Bounding Box) method
-        if (self.x < ball.x + ball.radius and
-            self.x + self.width > ball.x - ball.radius and
-            self.y < ball.y + ball.radius and
-            self.y + self.height > ball.y - ball.radius):
-            return True
-        return False
-
-    def remove(self):
-        """Mark the block as invisible (removed)."""
-        self.visible = False
-
-
-class Ball:
-    def __init__(self, x, y, radius, dx, dy):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.dx = dx  # Ball movement in x direction
-        self.dy = dy  # Ball movement in y direction
-
-    def update(self):
-        """Update the ball's position based on its velocity."""
-        self.x += self.dx
-        self.y += self.dy
 
 #modified from chat gpt - create a codebase for blocks to be removed once collided with ball
 class Update:

@@ -23,6 +23,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.running = True
         self.playing = True
+        self.score = 0
     def load_data(self):
         self.game_folder = path.dirname(__file__)
         # load high score file
@@ -50,7 +51,8 @@ class Game:
         self.all_blocks = pg.sprite.Group()
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
-        self.player = paddle(self, 1, 1)
+        self.player = paddle(self, 101, 101)
+        #self.check_highscore()
 
 
         for row, tiles in enumerate(self.map.data):
@@ -67,6 +69,18 @@ class Game:
                     Powerup(self, col, row)
                 if tile == 'A':
                     Projectile(self, col, row)
+    # def check_highscore(self):
+    #   # if the file exists
+    #     if path.exists(HS_FILE):
+    #       print("this exists...")
+    #       with open(path.join(self.game_folder, HS_FILE), 'r') as f:
+    #             self.best_time = int(f.read())
+    #     else:
+    #       with open(path.join(self.game_folder, HS_FILE), 'w') as f:
+    #             f.write("0")
+    #             self.best_time =  100000
+    #             f.write(str(100000))
+    #     print("File created and written successfully.")
     
     def run(self):
         while self.running:
@@ -132,6 +146,16 @@ class Game:
             self.draw_text(self.screen, "Restart", 48, BLACK, WIDTH / 2, HEIGHT / 4)
             pg.display.flip()
             self.wait_for_key()
+
+    def show_end_screen(self):
+        print("File created and written successfully.")
+        self.screen.fill(BLACK)
+        self.draw_text(self.screen, "You're done! ", 48, WHITE, WIDTH / 2, HEIGHT / 4)
+        self.draw_text(self.screen, "Best time: " + str(self.best_time), 22, WHITE, WIDTH / 2, HEIGHT / 2)
+        self.draw_text(self.screen, "Press a key to play again", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
+        pg.display.flip()
+        self.wait_for_key()
+
     
     def wait_for_key(self):
         waiting = True
