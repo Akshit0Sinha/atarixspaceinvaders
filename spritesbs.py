@@ -125,17 +125,7 @@ class Block(Sprite):
 
 
 #modified from chat gpt - create a codebase for blocks to be removed once collided with ball
-class Update:
-    def __init__(self, blocks, ball):
-        self.blocks = blocks  # List of blocks in the game
-        self.ball = ball      # The ball object
 
-    def check_collisions(self):
-        """Check for collisions between the ball and the blocks."""
-        for block in self.blocks:
-            if block.visible and block.collide(self.ball):
-                block.remove()  # Remove the block on collision
-            
 
     def update(self):
         """Update game state: move the ball and check for collisions."""
