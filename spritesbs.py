@@ -12,13 +12,14 @@ class Paddle(Sprite):
         self.game = game
         self.groups = game.all_sprites, game.all_paddles
         Sprite.__init__(self, self.groups)
-        self.image = pg.Surface((32,32))
+        self.image = pg.Surface((1,1))
         self.rect = self.image.get_rect()
         self.image.fill(BLUE)
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.speed = 10
         self.vx, self.vy = 0, 0
+        print("i Created a paddle...")
 # code to move paddle
     def get_keys(self):
         keys = pg.key.get_pressed()

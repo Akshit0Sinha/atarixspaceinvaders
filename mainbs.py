@@ -54,21 +54,20 @@ class Game:
         self.player = Paddle(self, 101, 101)
         #self.check_highscore()
 
-
         for row, tiles in enumerate(self.map.data):
-            print(row)
+            #print(row)
             for col, tile in enumerate(tiles):
-                print(col)
+                    #print(col)
                 if tile == '1':
-                    Wall(self, col, row)
+                    self.wall = Wall(self, col, row)
                 if tile == 'P':
-                    Paddle(self, col, row)
+                    self.player = Paddle(self, col, row)
                 if tile == 'B':
-                    Block(self, col, row)
-                if tile == 'U':
-                    Powerup(self, col, row)
+                    self.block = Block(self, col, row)
+                if tile == 'U':                        
+                    self.powerup = Powerup(self, col, row)
                 if tile == 'A':
-                    Projectile(self, col, row)
+                    self.projectile = Projectile(self, col, row)
     # def check_highscore(self):
     #   # if the file exists
     #     if path.exists(HS_FILE):
@@ -97,23 +96,17 @@ class Game:
 
 # allows for system to get new events occurring after keys pressed
     def events(self):
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                if self.score > self.highscore:
-                    self.highscore = self.score
-                    with open(path.join(self.game_folder, HS_FILE), 'w') as f:
-                        f.write(str(self.score))
+        keys = pg.key.get_pressed()
+        if keys[pg.K_r] and keys[pg.K_ESCAPE]:
+    # if keys[pg.K_r] and keys[pg.K_ESCAPE]:
+            print("control")
             if self.playing:
                 self.playing = False
-            self.running = True
-            if event.type == pg.K_r:
-                if event.key == pg.K_ESCAPE:  # Example: press Escape to quit
-                    self.running = False
-
-            
+            self.running = False
 #base code for creating base screen 
     def update(self):
         self.all_sprites.update()
+
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -124,9 +117,17 @@ class Game:
     
     def draw(self):
         self.screen.fill(WHITE)
-        self.draw_text(self.screen, str(self.dt*1000), 24, BLACK, WIDTH/2, HEIGHT/2)
-        #self.draw_text(self.screen, "Powerups Collected: " + str(self.player.powerups), 24, BLACK, WIDTH/2, HEIGHT/24)
         self.all_sprites.draw(self.screen)
+        self.draw_text(self.screen, str(self.dt*1000), 24, BLACK, WIDTH/2, HEIGHT/2)
+        self.screen.fill(WHITE)
+        self.all_sprites.draw(self.screen)
+        
+        self.draw_text(self.screen, str(self.dt*1000), 24, WHITE, WIDTH/30, HEIGHT/30)
+        self.draw_text(self.screen, str(self.score), 24, BLACK, WIDTH-100, 50)
+        
+        self.test_rect = pg.Rect(WIDTH/2, HEIGHT/2, 100, 50)
+        #pg.draw.rect(self.screen, BLUE, self.test_rect)
+        #self.draw_text(self.screen, "Powerups Collected: " + str(self.player.powerups), 24, BLACK, WIDTH/2, HEIGHT/24)
         pg.display.flip()
     def show_go_screen(self):
         self.game_folder = path.dirname(__file__)
