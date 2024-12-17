@@ -51,7 +51,7 @@ class Game:
         self.all_blocks = pg.sprite.Group()
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
-        self.player = Paddle(self, 101, 101)
+        # self.player = Paddle(self, 101, 101)
         #self.check_highscore()
 
         for row, tiles in enumerate(self.map.data):
@@ -64,8 +64,6 @@ class Game:
                     self.player = Paddle(self, col, row)
                 if tile == 'B':
                     self.block = Block(self, col, row)
-                if tile == 'U':                        
-                    self.powerup = Powerup(self, col, row)
                 if tile == 'A':
                     self.projectile = Projectile(self, col, row)
     # def check_highscore(self):
@@ -96,6 +94,13 @@ class Game:
 
 # allows for system to get new events occurring after keys pressed
     def events(self):
+        for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    if self.score > self.highscore:
+                        with open(path.join(self.game_folder, HS_FILE), 'w') as f:
+                            f.write(str(self.score))
+                    self.running = False
+                    self.quit()
         keys = pg.key.get_pressed()
         if keys[pg.K_r] and keys[pg.K_ESCAPE]:
     # if keys[pg.K_r] and keys[pg.K_ESCAPE]:

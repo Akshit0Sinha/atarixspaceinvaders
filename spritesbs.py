@@ -1,3 +1,4 @@
+
 import pygame as pg
 from mainbs import *
 from pygame.sprite import Sprite
@@ -12,9 +13,9 @@ class Paddle(Sprite):
         self.game = game
         self.groups = game.all_sprites, game.all_paddles
         Sprite.__init__(self, self.groups)
-        self.image = pg.Surface((1,1))
+        self.image = pg.Surface((TILESIZE*2,TILESIZE/4))
         self.rect = self.image.get_rect()
-        self.image.fill(BLUE)
+        self.image.fill(RED)
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.speed = 10
@@ -27,10 +28,7 @@ class Paddle(Sprite):
             self.vx -= self.speed
         if keys[pg.K_RIGHT]:
             self.vx += self.speed
-        if pg.mouse.get_pressed()[0]:
-            print(pg.mouse.get_pos())
-            Projectile(self.game, WIDTH/2, HEIGHT/2)
-            print(pg.rect.x)
+
             
 # paddle colliding with ball
     def collide_with_walls(self, dir):
@@ -63,6 +61,17 @@ class Paddle(Sprite):
             if str(hits[0].__class__.__name__) == "Powerup":
                 print("i hit a powerup...")
                 self.speed =+ 5
+    def update(self):
+        self.get_keys()
+        self.x += self.vx * self.game.dt
+        self.y += self.vy * self.game.dt
+        # reverse order to fix collision issues
+        
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        
+        self.rect.y = self.y
+        self.collide_with_walls('y')
         
 
 #projectile is ball, so initializing ball
@@ -71,11 +80,14 @@ class Projectile(Sprite):
         self.game = game
         self.groups = game.all_sprites, game.all_projectiles
         Sprite.__init__(self, self.groups)
-        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = pg.Surface((TILESIZE/2, TILESIZ    E/2))
         self.rect = self.image.get_rect()
-        self.image.fill(BLUE)
-        self.rect.x = x 
-        self.rect.y = y 
+        self.image.fill(GREEN)
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        self.vx = 5 
+        self.vy = 5
+        self.speed = 1
         #physics on ball with colliding, movement, etc
     def update(self):
         projectile_radius = 20
@@ -83,29 +95,30 @@ class Projectile(Sprite):
         projectile_y = HEIGHT // 2
         projectile_dx = 5  
         projectile_dy = 5  
-        self.x += self.dx
-        self.y += self.dy
+        #self.vx += self.x
+        #self.vy += self.dy
         if projectile_x - projectile_radius <= 0 or projectile_x + projectile_radius >= WIDTH:
-             projectile_dx = -projectile_dx
+            projectile_dx = -projectile_dx
         if projectile_y - projectile_radius <= 0 or projectile_y + projectile_radius >= HEIGHT:
-             projectile_dy = -projectile_dy
+            projectile_dy = -projectile_dy
 
 # collide ball with blocks
-    def collide_with_stuff(self, group, kill):
-        hits = pg.sprite.spritecollide(self, group, kill)
-        projectile_radius = 20
-        projectile_x = WIDTH // 2
-        projectile_y = HEIGHT // 2
-        projectile_dx = 5  
-        projectile_dy = 5
-    def update(self):
-        hits = pg.sprite.spritecollide(self, self.game.all_projectiles, False)
+        self.rect.x += self.vx * self.speed
+        self.rect.y += self.vy * self.speed
+        hits = pg.sprite.spritecollide(self, self.game.all_blocks, True)
+        whits = pg.sprite.spritecollide(self, self.game.all_walls, False)
+        phits = pg.sprite.collide_rect(self, self.game.player)
         if hits:
-            if str(hits[0].__class__.__name__) == "Block":
-                print("I hit a block")
-                hits = pg.sprite.spritecollide(self,self.game.all_projectiles, False)
-                projectile_dx = -projectile_dx
-                projectile_dy = -projectile_dy
+            print("I hit a block")
+            self.speed *= -1
+        if whits:
+            print("I hit a wall")
+            self.speed *= -1
+        if phits:
+            print("I hit a wall")
+            self.speed *= -1
+            projectile_dx = -projectile_dx
+            projectile_dy = -projectile_dy
     
         
 #blocks on screen
@@ -117,11 +130,11 @@ class Block(Sprite):
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.rect = self.image.get_rect()
         self.image.fill(BLUE)
-        self.rect.x = x 
-        self.rect.y = y 
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
         self.x = x
         self.y = y
-        self.visible = True  # To track if the block is still active
+        self.visible = True  # To track if the block is still active 
     
     # def update(self):
     #     """Update game state: move the ball and check for collisions."""
@@ -139,23 +152,3 @@ class Wall(Sprite):
         self.image.fill(BLUE)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-    
-        
-#powerups class, still need to add  poweup release from collision of ball with block
-class Powerup(Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.all_powerups
-        Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.rect = self.image.get_rect()
-        self.image.fill(GREEN)
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
-        self.update()
-
-    def update(self):
-        pass
-
-
-       
