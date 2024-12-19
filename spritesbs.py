@@ -36,8 +36,8 @@ class Paddle(Sprite):
             hits = pg.sprite.spritecollide(self, self.game.all_walls, False)
             if hits:
                 if self.vx > 0:
-                    self.x = hits[0].rect.left - TILESIZE
-                    # self.x = hits[0].rect.left - self.rect.width
+                    #self.x = hits[0].rect.left + TILESIZE
+                    self.x = hits[0].rect.left - self.rect.width
                 if self.vx < 0:
                     self.x = hits[0].rect.right
                 self.vx = 0
@@ -80,7 +80,7 @@ class Projectile(Sprite):
         self.game = game
         self.groups = game.all_sprites, game.all_projectiles
         Sprite.__init__(self, self.groups)
-        self.image = pg.Surface((TILESIZE/2, TILESIZ    E/2))
+        self.image = pg.Surface((TILESIZE/2, TILESIZE/2))
         self.rect = self.image.get_rect()
         self.image.fill(GREEN)
         self.rect.x = x * TILESIZE
@@ -117,8 +117,8 @@ class Projectile(Sprite):
         if phits:
             print("I hit a wall")
             self.speed *= -1
-            projectile_dx = -projectile_dx
-            projectile_dy = -projectile_dy
+            projectile_dx = projectile_dx
+            projectile_dy = projectile_dy
     
         
 #blocks on screen
