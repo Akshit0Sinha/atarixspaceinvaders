@@ -51,6 +51,7 @@ class Game:
         self.all_blocks = pg.sprite.Group()
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
+        self.all_lava = pg.sprite.Group()
         # self.player = Paddle(self, 101, 101)
         #self.check_highscore()
 
@@ -66,6 +67,8 @@ class Game:
                     self.block = Block(self, col, row)
                 if tile == 'A':
                     self.projectile = Projectile(self, col, row)
+                if tile == 'L':
+                    self.lava = Lava(self,col,row)
     # def check_highscore(self):
     #   # if the file exists
     #     if path.exists(HS_FILE):
@@ -87,6 +90,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
+        pg.quit()
 
     
         

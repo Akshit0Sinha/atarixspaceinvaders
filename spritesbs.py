@@ -108,6 +108,7 @@ class Projectile(Sprite):
         hits = pg.sprite.spritecollide(self, self.game.all_blocks, True)
         whits = pg.sprite.spritecollide(self, self.game.all_walls, False)
         phits = pg.sprite.collide_rect(self, self.game.player)
+        lhits = pg.sprite.spritecollide(self,self.game.all_lava, True)
         if hits:
             print("I hit a block")
             self.speed *= -1
@@ -119,6 +120,9 @@ class Projectile(Sprite):
             self.speed *= -1
             projectile_dx = projectile_dx
             projectile_dy = projectile_dy
+        if lhits:
+            print("I hit lava")
+            pg.quit
     
         
 #blocks on screen
@@ -150,5 +154,16 @@ class Wall(Sprite):
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.rect = self.image.get_rect()
         self.image.fill(BLUE)
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
+class Lava(Sprite):
+    def __init__(self,game,x,y):
+        self.game = game
+        self.groups = game.all_sprites, game.all_lava
+        Sprite.__init__(self,self.groups)
+        self.image = pg.Surface((TILESIZE,TILESIZE))
+        self.rect = self.image.get_rect()
+        self.image.fill(LAVA)
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
