@@ -104,8 +104,8 @@ class Projectile(Sprite):
             #projectile_dy = 3/2* projectile_dx
 
  # collide ball with blocks
-        self.rect.x += self.vx * self.speed
-        self.rect.y += self.vy * self.speed
+        self.rect.x += self.vx * self.speed *-1
+        self.rect.y += self.vy * self.speed *-1
         hits = pg.sprite.spritecollide(self, self.game.all_blocks, True)
         whits = pg.sprite.spritecollide(self, self.game.all_walls, False)#
         phits = pg.sprite.collide_rect(self, self.game.player)
@@ -113,18 +113,29 @@ class Projectile(Sprite):
         if hits:
             print("I hit a block")
             self.speed *= -1
-            projectile_dx = -self.vy
-            projectile_dy = self.vx
+            self.vx = self.vx
+            self.vy = -self.vy
         if whits:
             print("I hit a wall")
-            self.speed *= -1
-            projectile_dx = -3/self.vy
-            projectile_dy = -3/2*self.vx
+            if self.rect.right > WIDTH:
+                print("I Hit the right wall")
+                self.vx = -self.vx
+                self.vy = self.vy
+            elif self.rect.left < 0:
+                print("I hit the left wall!")
+                self.vy = self.vy
+                self.vx = -self.vx
+            elif self.rect.top < 0:
+                print("I hit the roof")
+                self.vy = -self.vy
+                self.vx = self.vx
+            #self.rect.x = self.vx
+            #self.rect.y = self.vy
         if phits:
-            print("I hit a wall")
+            print("I hit a paddle")
             self.speed *= -1
-            projectile_dx = self.vy
-            projectile_dy = self.vx
+            self.vx = -self.vy
+            self.vy = -self.vx
         if lhits:
             print("I hit lava")
             pg.quit

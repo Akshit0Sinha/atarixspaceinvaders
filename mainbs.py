@@ -62,8 +62,8 @@ class Game:
                     #print(col)
                 if tile == '1':
                     self.wall = Wall(self, col, row)
-                if tile == '2':
-                    self.sidewall = Side(self, col, row)
+                #if tile == '2':
+                    #self.sidewall = Side(self, col, row)
                 if tile == 'P':
                     self.player = Paddle(self, col, row)
                 if tile == 'B':
