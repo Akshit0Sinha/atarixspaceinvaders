@@ -112,11 +112,10 @@ class Projectile(Sprite):
         lhits = pg.sprite.spritecollide(self,self.game.all_lava, True)
         if hits:
             print("I hit a block")
-            self.speed *= -1
+            #self.speed *= -1
             self.vx = self.vx
             self.vy = -self.vy
         if whits:
-            print("I hit a wall")
             if self.rect.right > WIDTH:
                 print("I Hit the right wall")
                 self.vx = -self.vx
@@ -127,15 +126,19 @@ class Projectile(Sprite):
                 self.vx = -self.vx
             elif self.rect.top < 0:
                 print("I hit the roof")
-                self.vy = -self.vy
+                self.vy = -2* self.vy
+                self.vy = self.vy/2
                 self.vx = self.vx
+                self.rect.top = 0
+            else:
+                print("idk what happened")
             #self.rect.x = self.vx
             #self.rect.y = self.vy
         if phits:
             print("I hit a paddle")
-            self.speed *= -1
-            self.vx = -self.vy
-            self.vy = -self.vx
+           # self.speed *= -1
+            self.vx = self.vx
+            self.vy = -self.vy
         if lhits:
             print("I hit lava")
             pg.quit
