@@ -52,6 +52,7 @@ class Game:
         self.all_powerups = pg.sprite.Group()
         self.all_projectiles = pg.sprite.Group()
         self.all_lava = pg.sprite.Group()
+        self.all_sides = pg.sprite.Group()
         # self.player = Paddle(self, 101, 101)
         #self.check_highscore()
 
@@ -61,6 +62,8 @@ class Game:
                     #print(col)
                 if tile == '1':
                     self.wall = Wall(self, col, row)
+                if tile == '2':
+                    self.sidewall = Side(self, col, row)
                 if tile == 'P':
                     self.player = Paddle(self, col, row)
                 if tile == 'B':

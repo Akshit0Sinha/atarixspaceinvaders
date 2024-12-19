@@ -90,36 +90,41 @@ class Projectile(Sprite):
         self.speed = 1
         #physics on ball with colliding, movement, etc
     def update(self):
-        projectile_radius = 20
-        projectile_x = WIDTH // 2
-        projectile_y = HEIGHT // 2
+        self.rect.y -= self.speed
+        #projectile_radius = 20
+        #projectile_x = WIDTH // 2
+        #projectile_y = HEIGHT // 2
         projectile_dx = 5  
         projectile_dy = 5  
-        #self.vx += self.x
-        #self.vy += self.dy
-        if projectile_x - projectile_radius <= 0 or projectile_x + projectile_radius >= WIDTH:
-            projectile_dx = -projectile_dx
-        if projectile_y - projectile_radius <= 0 or projectile_y + projectile_radius >= HEIGHT:
-            projectile_dy = -str(3/2)* projectile_dy
+         #self.vx += self.x
+         #self.vy += self.dy
+        #if projectile_x - projectile_radius <= 0 or projectile_x + projectile_radius >= WIDTH:
+           #projectile_dx = -3/2*projectile_dy
+        #if projectile_y - projectile_radius <= 0 or projectile_y + projectile_radius >= HEIGHT:
+            #projectile_dy = 3/2* projectile_dx
 
-# collide ball with blocks
+ # collide ball with blocks
         self.rect.x += self.vx * self.speed
         self.rect.y += self.vy * self.speed
         hits = pg.sprite.spritecollide(self, self.game.all_blocks, True)
-        whits = pg.sprite.spritecollide(self, self.game.all_walls, False)
+        whits = pg.sprite.spritecollide(self, self.game.all_walls, False)#
         phits = pg.sprite.collide_rect(self, self.game.player)
         lhits = pg.sprite.spritecollide(self,self.game.all_lava, True)
         if hits:
             print("I hit a block")
             self.speed *= -1
+            projectile_dx = -self.vy
+            projectile_dy = self.vx
         if whits:
             print("I hit a wall")
             self.speed *= -1
+            projectile_dx = -3/self.vy
+            projectile_dy = -3/2*self.vx
         if phits:
             print("I hit a wall")
             self.speed *= -1
-            projectile_dx = projectile_dx
-            projectile_dy = projectile_dy
+            projectile_dx = self.vy
+            projectile_dy = self.vx
         if lhits:
             print("I hit lava")
             pg.quit
