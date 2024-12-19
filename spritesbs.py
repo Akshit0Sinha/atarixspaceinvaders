@@ -13,10 +13,10 @@ class Paddle(Sprite):
         self.game = game
         self.groups = game.all_sprites, game.all_paddles
         Sprite.__init__(self, self.groups)
-        self.image = pg.Surface((TILESIZE*2,TILESIZE/4))
+        self.image = pg.Surface((TILESIZE*3,TILESIZE/2))
         self.rect = self.image.get_rect()
         self.image.fill(RED)
-        self.x = x * TILESIZE
+        self.x = x * TILESIZE 
         self.y = y * TILESIZE
         self.speed = 10
         self.vx, self.vy = 0, 0
@@ -100,7 +100,7 @@ class Projectile(Sprite):
         if projectile_x - projectile_radius <= 0 or projectile_x + projectile_radius >= WIDTH:
             projectile_dx = -projectile_dx
         if projectile_y - projectile_radius <= 0 or projectile_y + projectile_radius >= HEIGHT:
-            projectile_dy = -projectile_dy
+            projectile_dy = -str(3/2)* projectile_dy
 
 # collide ball with blocks
         self.rect.x += self.vx * self.speed
