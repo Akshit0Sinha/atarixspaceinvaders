@@ -176,6 +176,7 @@ class Wall(Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+#lower floor (if passes = no ball = no game)
 class Lava(Sprite):
     def __init__(self,game,x,y):
         self.game = game

@@ -84,7 +84,7 @@ class Game:
     #             self.best_time =  100000
     #             f.write(str(100000))
     #     print("File created and written successfully.")
-    
+    #adding everything to game dash
     def run(self):
         while self.running:
             #update evertyhing in sprite with four event definitions to define sprite
@@ -126,7 +126,7 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x,y)
         surface.blit(text_surface, text_rect)
-    
+    #filling game dash
     def draw(self):
         self.screen.fill(WHITE)
         self.all_sprites.draw(self.screen)
@@ -141,6 +141,7 @@ class Game:
         #pg.draw.rect(self.screen, BLUE, self.test_rect)
         #self.draw_text(self.screen, "Powerups Collected: " + str(self.player.powerups), 24, BLACK, WIDTH/2, HEIGHT/24)
         pg.display.flip()
+    #game start screen
     def show_go_screen(self):
         self.game_folder = path.dirname(__file__)
         # game over/continue
@@ -159,7 +160,7 @@ class Game:
             self.draw_text(self.screen, "Restart", 48, BLACK, WIDTH / 2, HEIGHT / 4)
             pg.display.flip()
             self.wait_for_key()
-
+#game end screen
     def show_end_screen(self):
         print("File created and written successfully.")
         self.screen.fill(BLACK)
